@@ -1,0 +1,346 @@
+[bar/i3polybar]
+type = internal/i3
+width = 100%
+wm-restack = i3
+
+modules-left = i3 volume
+modules-center = date
+modules-right = network battery
+
+bottom = true
+tray-padding = 2
+
+font-0 = Sans-Regular:size=8;0
+font-1 = "Font Awesome 5 Free:style=Regular:size=10;0"
+font-2 = "Font Awesome 5 Free:style=Solid:size=10;0"
+font-3 = "Font Awesome 5 Brands:style=Regular:size=10;0"
+
+module-margin-left = 1
+module-margin-right = 2
+
+border-size = 2
+border-color = #c5c8c6
+
+background = #1d1f21
+foreground = #c5c8c6
+
+[module/wired-network]
+type = internal/network
+interface = eth1
+
+[module/wireless-network]
+type = internal/network
+interface = wlan1
+
+[module/network]
+type = internal/network
+; Name of the network interface to display. You can get the names of the
+; interfaces on your machine with `ip link`
+; Wireless interfaces often start with `wl` and ethernet interface with `eno` or `eth`
+interface = wlan1
+
+; Seconds to sleep between updates
+; Default: 1
+interval = 3.0
+
+; Test connectivity every Nth update
+; A value of 0 disables the feature
+; NOTE: Experimental (needs more testing)
+; Default: 0
+;ping-interval = 3
+
+; @deprecated: Define min width using token specifiers (%downspeed:min% and %upspeed:min%)
+; Minimum output width of upload/download rate
+; Default: 3
+udspeed-minwidth = 5
+
+; Accumulate values from all interfaces
+; when querying for up/downspeed rate
+; Default: false
+accumulate-stats = true
+
+; Consider an `UNKNOWN` interface state as up.
+; Some devices like USB network adapters have 
+; an unknown state, even when they're running
+; Default: false
+unknown-as-up = true
+
+; Available tags:
+;   <label-connected> (default)
+;   <ramp-signal>
+format-connected = <ramp-signal> <label-connected>
+
+; Available tags:
+;   <label-disconnected> (default)
+format-disconnected = <label-disconnected>
+
+; Available tags:
+;   <label-connected> (default)
+;   <label-packetloss>
+;   <animation-packetloss>
+format-packetloss = <animation-packetloss> <label-connected>
+
+; All labels support the following tokens:
+;   %ifname%    [wireless+wired]
+;   %local_ip%  [wireless+wired]
+;   %local_ip6% [wireless+wired]
+;   %essid%     [wireless]
+;   %signal%    [wireless]
+;   %upspeed%   [wireless+wired]
+;   %downspeed% [wireless+wired]
+;   %linkspeed% [wired]
+
+; Default: %ifname% %local_ip%
+label-connected = %essid% %downspeed:9%
+label-connected-foreground = #eefafafa
+
+; Default: (none)
+label-disconnected = not connected
+label-disconnected-foreground = #66ffffff
+
+; Default: (none)
+;label-packetloss = %essid%
+;label-packetloss-foreground = #eefafafa
+
+; Only applies if <ramp-signal> is used
+ramp-signal-0 = 😱
+ramp-signal-1 = 😠
+ramp-signal-2 = 😒
+ramp-signal-3 = 😊
+ramp-signal-4 = 😃
+ramp-signal-5 = 😈
+
+; Only applies if <animation-packetloss> is used
+animation-packetloss-0 = ⚠
+animation-packetloss-0-foreground = #ffa64c
+animation-packetloss-1 = 📶
+animation-packetloss-1-foreground = #000000
+; Framerate in milliseconds
+animation-packetloss-framerate = 500
+
+[module/volume]
+type = internal/pulseaudio
+
+; Sink to be used, if it exists (find using `pacmd list-sinks`, name field)
+; If not, uses default sink
+sink = alsa_output.pci-0000_12_00.3.analog-stereo
+
+; Use PA_VOLUME_UI_MAX (~153%) if true, or PA_VOLUME_NORM (100%) if false
+; Default: true
+use-ui-max = true
+
+; Interval for volume increase/decrease (in percent points)
+; Default: 5
+interval = 5
+
+; Available tags:
+;   <label-volume> (default)
+;   <ramp-volume>
+;   <bar-volume>
+format-volume = <ramp-volume> <label-volume>
+
+; Available tags:
+;   <label-muted> (default)
+;   <ramp-volume>
+;   <bar-volume>
+;format-muted = <label-muted>
+
+; Available tokens:
+;   %percentage% (default)
+;   %decibels%
+;label-volume = %percentage%%
+
+; Available tokens:
+;   %percentage% (default)
+;   %decibels%
+label-muted = 🔇 muted
+label-muted-foreground = #666
+
+; Only applies if <ramp-volume> is used
+ramp-volume-0 = 🔈
+ramp-volume-1 = 🔉
+ramp-volume-2 = 🔊
+
+; Right and Middle click
+click-right = pavucontrol
+; click-middle = 
+
+
+
+
+
+[module/i3]
+type = internal/i3
+
+; Only show workspaces defined on the same output as the bar
+;
+; Useful if you want to show monitor specific workspaces
+; on different bars
+;
+; Default: false
+pin-workspaces = true
+
+; This will split the workspace name on ':'
+; Default: false
+strip-wsnumbers = true
+
+; Sort the workspaces by index instead of the default
+; sorting that groups the workspaces by output
+; Default: false
+index-sort = true
+
+; Create click handler used to focus workspace
+; Default: true
+enable-click = false
+
+; Create scroll handlers used to cycle workspaces
+; Default: true
+enable-scroll = false
+
+; Wrap around when reaching the first/last workspace
+; Default: true
+wrapping-scroll = false
+
+; Set the scroll cycle direction 
+; Default: true
+reverse-scroll = false
+
+; Use fuzzy (partial) matching on labels when assigning 
+; icons to workspaces
+; Example: code;♚ will apply the icon to all workspaces 
+; containing 'code' in the label
+; Default: false
+fuzzy-match = true
+
+; ws-icon-[0-9]+ = <label>;<icon>
+; NOTE: The <label> needs to match the name of the i3 workspace
+; Neither <label> nor <icon> can contain a semicolon (;)
+ws-icon-0 = 零;♚
+ws-icon-1 = 一;♛
+ws-icon-2 = 二;♜
+ws-icon-3 = 三;♝
+ws-icon-4 = 四;♞
+ws-icon-5 = 五
+ws-icon-6 = 六
+ws-icon-7 = 七
+ws-icon-8 = 八
+ws-icon-9 = 九
+ws-icon-default = ♟
+; NOTE: You cannot skip icons, e.g. to get a ws-icon-6
+; you must also define a ws-icon-5.
+; NOTE: Icon will be available as the %icon% token inside label-*
+
+; Available tags:
+;   <label-state> (default) - gets replaced with <label-(focused|unfocused|visible|urgent)>
+;   <label-mode> (default)
+format = <label-state> <label-mode>
+
+; Available tokens:
+;   %mode%
+; Default: %mode%
+label-mode = %mode%
+label-mode-padding = 2
+label-mode-background = #e60053
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+;   %output%
+; Default: %icon% %name%
+label-focused = %index%
+label-focused-foreground = #ffffff
+label-focused-background = #3f3f3f
+label-focused-underline = #fba922
+label-focused-padding = 4
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+;   %output%
+; Default: %icon% %name%
+label-unfocused = %index%
+label-unfocused-padding = 4
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+;   %output%
+; Default: %icon% %name%
+label-visible = %icon%
+label-visible-underline = #555555
+label-visible-padding = 4
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+;   %output%
+; Default: %icon% %name%
+label-urgent = %index%
+label-urgent-foreground = #000000
+label-urgent-background = #bd2c40
+label-urgent-padding = 4
+
+; Separator in between workspaces
+label-separator = |
+label-separator-padding = 2
+label-separator-foreground = #ffb52a
+
+
+
+
+
+
+[module/battery]
+type = internal/battery
+
+; This is useful in case the battery never reports 100% charge
+full-at = 99
+
+; Use the following command to list batteries and adapters:
+; $ ls -1 /sys/class/power_supply/
+battery = BAT0
+adapter = ADP1
+
+; If an inotify event haven't been reported in this many
+; seconds, manually poll for new values.
+;
+; Needed as a fallback for systems that don't report events
+; on sysfs/procfs.
+;
+; Disable polling by setting the interval to 0.
+;
+; Default: 5
+poll-interval = 5
+
+[module/date]
+type = internal/date
+
+; Seconds to sleep between updates
+interval = 1.0
+
+; See "http://en.cppreference.com/w/cpp/io/manip/put_time" for details on how to format the date string
+; NOTE: if you want to use syntax tags here you need to use %%{...}
+date = %Y-%m-%d%
+
+; Optional time format
+time = %H:%M
+
+; if `date-alt` or `time-alt` is defined, clicking
+; the module will toggle between formats
+date-alt = %A, %d %B %Y
+time-alt = %H:%M:%S
+
+; Available tags:
+;   <label> (default)
+format = 🕓 <label>
+
+
+; Available tokens:
+;   %date%
+;   %time%
+; Default: %date%
+label = %date% %time%
