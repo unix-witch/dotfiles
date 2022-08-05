@@ -1,304 +1,65 @@
-[bar/i3polybar]
-type = internal/i3
+[colors]
+background = #282A2E
+background-alt = #373B41
+foreground = #C5C8C6
+primary = #F0C674
+secondary = #8ABEB7
+alert = #A54242
+disabled = #707880
+
+[bar/i3bar]
 width = 100%
-wm-restack = i3
-
-modules-left = i3 volume
-modules-center = date
-modules-right = network battery
-
+height = 24pt
+radius = 6
 bottom = true
-tray-padding = 2
 
-font-0 = Sans-Regular:size=8;0
-font-1 = "Font Awesome 5 Free:style=Regular:size=10;0"
-font-2 = "Font Awesome 5 Free:style=Solid:size=10;0"
-font-3 = "Font Awesome 5 Brands:style=Regular:size=10;0"
+; dpi = 96
 
-module-margin-left = 1
-module-margin-right = 2
+background = ${colors.background}
+foreground = ${colors.foreground}
 
-border-size = 2
-border-color = #c5c8c6
+line-size = 3pt
 
-background = #1d1f21
-foreground = #c5c8c6
+border-size = 4pt
+border-color = #00000000
 
-[module/wired-network]
-type = internal/network
-interface = eth1
+padding-left = 0
+padding-right = 1
 
-[module/wireless-network]
-type = internal/network
-interface = wlan1
+module-margin = 1
 
-[module/network]
-type = internal/network
-; Name of the network interface to display. You can get the names of the
-; interfaces on your machine with `ip link`
-; Wireless interfaces often start with `wl` and ethernet interface with `eno` or `eth`
-interface = wlan1
+separator = |
+separator-foreground = ${colors.disabled}
 
-; Seconds to sleep between updates
-; Default: 1
-interval = 3.0
+font-0 = monospace:size=10;2
 
-; Test connectivity every Nth update
-; A value of 0 disables the feature
-; NOTE: Experimental (needs more testing)
-; Default: 0
-;ping-interval = 3
+modules-left = xworkspaces xwindow
+modules-right = battery filesystem pulseaudio xkeyboard memory cpu wlan date ;eth
 
-; @deprecated: Define min width using token specifiers (%downspeed:min% and %upspeed:min%)
-; Minimum output width of upload/download rate
-; Default: 3
-udspeed-minwidth = 5
+cursor-click = pointer
+cursor-scroll = ns-resize
 
-; Accumulate values from all interfaces
-; when querying for up/downspeed rate
-; Default: false
-accumulate-stats = true
+enable-ipc = true
 
-; Consider an `UNKNOWN` interface state as up.
-; Some devices like USB network adapters have 
-; an unknown state, even when they're running
-; Default: false
-unknown-as-up = true
+; tray-position = right
 
-; Available tags:
-;   <label-connected> (default)
-;   <ramp-signal>
-format-connected = <ramp-signal> <label-connected>
+; wm-restack = generic
+; wm-restack = bspwm
+; wm-restack = i3
 
-; Available tags:
-;   <label-disconnected> (default)
-format-disconnected = <label-disconnected>
-
-; Available tags:
-;   <label-connected> (default)
-;   <label-packetloss>
-;   <animation-packetloss>
-format-packetloss = <animation-packetloss> <label-connected>
-
-; All labels support the following tokens:
-;   %ifname%    [wireless+wired]
-;   %local_ip%  [wireless+wired]
-;   %local_ip6% [wireless+wired]
-;   %essid%     [wireless]
-;   %signal%    [wireless]
-;   %upspeed%   [wireless+wired]
-;   %downspeed% [wireless+wired]
-;   %linkspeed% [wired]
-
-; Default: %ifname% %local_ip%
-label-connected = %essid% %downspeed:9%
-label-connected-foreground = #eefafafa
-
-; Default: (none)
-label-disconnected = not connected
-label-disconnected-foreground = #66ffffff
-
-; Default: (none)
-;label-packetloss = %essid%
-;label-packetloss-foreground = #eefafafa
-
-; Only applies if <ramp-signal> is used
-ramp-signal-0 = 😱
-ramp-signal-1 = 😠
-ramp-signal-2 = 😒
-ramp-signal-3 = 😊
-ramp-signal-4 = 😃
-ramp-signal-5 = 😈
-
-; Only applies if <animation-packetloss> is used
-animation-packetloss-0 = ⚠
-animation-packetloss-0-foreground = #ffa64c
-animation-packetloss-1 = 📶
-animation-packetloss-1-foreground = #000000
-; Framerate in milliseconds
-animation-packetloss-framerate = 500
-
-[module/volume]
-type = internal/pulseaudio
-
-; Sink to be used, if it exists (find using `pacmd list-sinks`, name field)
-; If not, uses default sink
-sink = alsa_output.pci-0000_12_00.3.analog-stereo
-
-; Use PA_VOLUME_UI_MAX (~153%) if true, or PA_VOLUME_NORM (100%) if false
-; Default: true
-use-ui-max = true
-
-; Interval for volume increase/decrease (in percent points)
-; Default: 5
-interval = 5
-
-; Available tags:
-;   <label-volume> (default)
-;   <ramp-volume>
-;   <bar-volume>
-format-volume = <ramp-volume> <label-volume>
-
-; Available tags:
-;   <label-muted> (default)
-;   <ramp-volume>
-;   <bar-volume>
-;format-muted = <label-muted>
-
-; Available tokens:
-;   %percentage% (default)
-;   %decibels%
-;label-volume = %percentage%%
-
-; Available tokens:
-;   %percentage% (default)
-;   %decibels%
-label-muted = 🔇 muted
-label-muted-foreground = #666
-
-; Only applies if <ramp-volume> is used
-ramp-volume-0 = 🔈
-ramp-volume-1 = 🔉
-ramp-volume-2 = 🔊
-
-; Right and Middle click
-click-right = pavucontrol
-; click-middle = 
-
-
-
-
-
-[module/i3]
-type = internal/i3
-
-; Only show workspaces defined on the same output as the bar
-;
-; Useful if you want to show monitor specific workspaces
-; on different bars
-;
-; Default: false
-pin-workspaces = true
-
-; This will split the workspace name on ':'
-; Default: false
-strip-wsnumbers = true
-
-; Sort the workspaces by index instead of the default
-; sorting that groups the workspaces by output
-; Default: false
-index-sort = true
-
-; Create click handler used to focus workspace
-; Default: true
-enable-click = false
-
-; Create scroll handlers used to cycle workspaces
-; Default: true
-enable-scroll = false
-
-; Wrap around when reaching the first/last workspace
-; Default: true
-wrapping-scroll = false
-
-; Set the scroll cycle direction 
-; Default: true
-reverse-scroll = false
-
-; Use fuzzy (partial) matching on labels when assigning 
-; icons to workspaces
-; Example: code;♚ will apply the icon to all workspaces 
-; containing 'code' in the label
-; Default: false
-fuzzy-match = true
-
-; ws-icon-[0-9]+ = <label>;<icon>
-; NOTE: The <label> needs to match the name of the i3 workspace
-; Neither <label> nor <icon> can contain a semicolon (;)
-ws-icon-0 = 零;♚
-ws-icon-1 = 一;♛
-ws-icon-2 = 二;♜
-ws-icon-3 = 三;♝
-ws-icon-4 = 四;♞
-ws-icon-5 = 五
-ws-icon-6 = 六
-ws-icon-7 = 七
-ws-icon-8 = 八
-ws-icon-9 = 九
-ws-icon-default = ♟
-; NOTE: You cannot skip icons, e.g. to get a ws-icon-6
-; you must also define a ws-icon-5.
-; NOTE: Icon will be available as the %icon% token inside label-*
-
-; Available tags:
-;   <label-state> (default) - gets replaced with <label-(focused|unfocused|visible|urgent)>
-;   <label-mode> (default)
-format = <label-state> <label-mode>
-
-; Available tokens:
-;   %mode%
-; Default: %mode%
-label-mode = %mode%
-label-mode-padding = 2
-label-mode-background = #e60053
-
-; Available tokens:
-;   %name%
-;   %icon%
-;   %index%
-;   %output%
-; Default: %icon% %name%
-label-focused = %index%
-label-focused-foreground = #ffffff
-label-focused-background = #3f3f3f
-label-focused-underline = #fba922
-label-focused-padding = 4
-
-; Available tokens:
-;   %name%
-;   %icon%
-;   %index%
-;   %output%
-; Default: %icon% %name%
-label-unfocused = %index%
-label-unfocused-padding = 4
-
-; Available tokens:
-;   %name%
-;   %icon%
-;   %index%
-;   %output%
-; Default: %icon% %name%
-label-visible = %icon%
-label-visible-underline = #555555
-label-visible-padding = 4
-
-; Available tokens:
-;   %name%
-;   %icon%
-;   %index%
-;   %output%
-; Default: %icon% %name%
-label-urgent = %index%
-label-urgent-foreground = #000000
-label-urgent-background = #bd2c40
-label-urgent-padding = 4
-
-; Separator in between workspaces
-label-separator = |
-label-separator-padding = 2
-label-separator-foreground = #ffb52a
-
-
-
-
-
+; override-redirect = true
 
 [module/battery]
 type = internal/battery
 
 ; This is useful in case the battery never reports 100% charge
+; Default: 100
 full-at = 99
+
+; format-low once this charge percentage is reached
+; Default: 10
+; New in version 3.6.0
+low-at = 5
 
 ; Use the following command to list batteries and adapters:
 ; $ ls -1 /sys/class/power_supply/
@@ -315,32 +76,118 @@ adapter = ADP1
 ;
 ; Default: 5
 poll-interval = 5
+time-format = %H:%M
+
+
+;format-charging = <animation-charging> <label-charging>
+;format-discharging = <ramp-capacity> <label-discharging>
+
+;label-charging = Charging %percentage%%
+;label-discharging = Discharging %percentage%%
+;label-full = Fully charged
+;label-low = BATTERY LOW
+
+[module/xworkspaces]
+type = internal/xworkspaces
+
+label-active = %name%
+label-active-background = ${colors.background-alt}
+label-active-underline= ${colors.primary}
+label-active-padding = 1
+
+label-occupied = %name%
+label-occupied-padding = 1
+
+label-urgent = %name%
+label-urgent-background = ${colors.alert}
+label-urgent-padding = 1
+
+label-empty = %name%
+label-empty-foreground = ${colors.disabled}
+label-empty-padding = 1
+
+[module/xwindow]
+type = internal/xwindow
+label = %title:0:60:...%
+
+[module/filesystem]
+type = internal/fs
+interval = 25
+
+mount-0 = /
+
+label-mounted = %{F#F0C674}%mountpoint%%{F-} %percentage_used%%
+
+label-unmounted = %mountpoint% not mounted
+label-unmounted-foreground = ${colors.disabled}
+
+[module/pulseaudio]
+type = internal/pulseaudio
+
+format-volume-prefix = "VOL "
+format-volume-prefix-foreground = ${colors.primary}
+format-volume = <label-volume>
+
+label-volume = %percentage%%
+
+label-muted = muted
+label-muted-foreground = ${colors.disabled}
+
+[module/xkeyboard]
+type = internal/xkeyboard
+blacklist-0 = num lock
+
+label-layout = %layout%
+label-layout-foreground = ${colors.primary}
+
+label-indicator-padding = 2
+label-indicator-margin = 1
+label-indicator-foreground = ${colors.background}
+label-indicator-background = ${colors.secondary}
+
+[module/memory]
+type = internal/memory
+interval = 2
+format-prefix = "RAM "
+format-prefix-foreground = ${colors.primary}
+label = %percentage_used:2%%
+
+[module/cpu]
+type = internal/cpu
+interval = 2
+format-prefix = "CPU "
+format-prefix-foreground = ${colors.primary}
+label = %percentage:2%%
+
+[network-base]
+type = internal/network
+interval = 5
+format-connected = <label-connected>
+format-disconnected = <label-disconnected>
+label-disconnected = %{F#F0C674}%ifname%%{F#707880} disconnected
+
+[module/wlan]
+inherit = network-base
+interface-type = wireless
+label-connected = %{F#F0C674}%ifname%%{F-} %essid% %local_ip%
+
+[module/eth]
+inherit = network-base
+interface-type = wired
+label-connected = %{F#F0C674}%ifname%%{F-} %local_ip%
 
 [module/date]
 type = internal/date
+interval = 1
 
-; Seconds to sleep between updates
-interval = 1.0
+date = %H:%M
+date-alt = %Y-%m-%d %H:%M:%S
 
-; See "http://en.cppreference.com/w/cpp/io/manip/put_time" for details on how to format the date string
-; NOTE: if you want to use syntax tags here you need to use %%{...}
-date = %Y-%m-%d%
+label = %date%
+label-foreground = ${colors.primary}
 
-; Optional time format
-time = %H:%M
+[settings]
+screenchange-reload = true
+pseudo-transparency = true
 
-; if `date-alt` or `time-alt` is defined, clicking
-; the module will toggle between formats
-date-alt = %A, %d %B %Y
-time-alt = %H:%M:%S
-
-; Available tags:
-;   <label> (default)
-format = 🕓 <label>
-
-
-; Available tokens:
-;   %date%
-;   %time%
-; Default: %date%
-label = %date% %time%
+; vim:ft=dosini
